@@ -8,7 +8,8 @@ const Navbar = () => {
 
   return (
     <div className='flex justify-between items-center px-4 md:px-8 border-b-1 border-zinc-900'>
-      <div>DeepRecc</div>
+      <span className="sm:hidden">dr</span>
+      <span className="hidden sm:inline">DeepRecc</span>
       <div className='flex gap-6'>
         <Link href='/' className={`py-2 + ${path === '/' ? 'border-b-2 border-white' : ''}`} >
             home
