@@ -13,10 +13,10 @@ const Navbar = () => {
         <Link href='/' className={`py-2 + ${path === '/' ? 'border-b-2 border-white' : ''}`} >
             home
         </Link>
-        <Link href='/following' className={`py-2 + ${path === '/requests' ? 'border-b-2 border-white' : ''}`}>
+        <Link href='/following' className={`py-2 + ${path === '/following' ? 'border-b-2 border-white' : ''}`}>
             following
         </Link>
-        <Link href='/reccs' className={`py-2 + ${path === '/requests' ? 'border-b-2 border-white' : ''}`}>
+        <Link href='/reccs' className={`py-2 + ${path === '/reccs' ? 'border-b-2 border-white' : ''}`}>
             my reccs
         </Link>
         <Link href='/profile' className={`py-2 + ${path === '/profile' ? 'border-b-2 border-white' : ''}`}>
