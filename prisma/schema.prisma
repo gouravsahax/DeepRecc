@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String @id @default(cuid())
+
+  username  String @unique
+  image     String?
+  bio       String?
+
+  reccs     Recc[]
+  comments  Comment[]
+  likes     Like[]
+
+  followers Follow[] @relation("Following")
+  following Follow[] @relation("Follower")
+
+  createdAt DateTime @default(now())
+}
+
+model Recc {
+  id          String @id @default(cuid())
+
+  title       String
+  description String?
+  url         String?
+
+  type        String // BOOK, MOVIE, WEBSITE, VIDEO, etc.
+
+  userId      String
+  user        User @relation(fields: [userId], references: [id])
+
+  likes       Like[]
+  comments    Comment[]
+
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+model Comment {
+  id        String @id @default(cuid())
+
+  content   String
+
+  userId    String
+  user      User @relation(fields: [userId], references: [id])
+
+  reccId    String
+  recc      Recc @relation(fields: [reccId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+model Like {
+  userId    String
+  reccId    String
+
+  user      User @relation(fields: [userId], references: [id])
+  recc      Recc @relation(fields: [reccId], references: [id], onDelete: Cascade)
+
+  @@id([userId, reccId])
+}
+
+model Follow {
+  followerId  String
+  followingId String
+
+  follower    User @relation("Follower", fields: [followerId], references: [id])
+  following   User @relation("Following", fields: [followingId], references: [id])
+
+  @@id([followerId, followingId])
+}
