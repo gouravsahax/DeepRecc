@@ -2,8 +2,8 @@ import React from 'react'
 
 const page = () => {
   return (
-    <div className="px-4 md:px-8 py-4 flex flex-col">
-        reccs
+    <div className="px-4 md:px-8 py-4 flex flex-co">
+      create
     </div>
   )
 }
