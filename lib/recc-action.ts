@@ -7,8 +7,18 @@ import { updateTag, unstable_cache } from "next/cache";
 import { uploadImage } from "./cloudinary";
 
 const getCachedAllRecs = unstable_cache(
-  async (uid?: string, skip?: number, take?: number) => {
+  async (uid?: string, skip?: number, take?: number, search?: string) => {
+    const where = search
+      ? {
+          type: {
+            contains: search,
+            mode: "insensitive" as const,
+          },
+        }
+      : {};
+
     return await prisma.recc.findMany({
+      where,
       skip,
       take,
       orderBy: {
@@ -47,8 +57,19 @@ const getCachedAllRecs = unstable_cache(
 );
 
 const getCachedRecsCount = unstable_cache(
-  async () => {
-    return await prisma.recc.count();
+  async (search?: string) => {
+    const where = search
+      ? {
+          type: {
+            contains: search,
+            mode: "insensitive" as const,
+          },
+        }
+      : {};
+
+    return await prisma.recc.count({
+      where,
+    });
   },
   ["reccs-count"],
   {
@@ -135,15 +156,15 @@ export async function createRecc(data: FormData) {
   redirect("/reccs");
 }
 
-export async function getAllRecs(page = 1, limit = 4) {
+export async function getAllRecs(page = 1, limit = 8, search = "") {
   const session = await auth();
   const userId = session?.user?.id;
   const skip = (page - 1) * limit;
   const take = limit;
 
   const [reccs, total] = await Promise.all([
-    getCachedAllRecs(userId || "anonymous", skip, take),
-    getCachedRecsCount(),
+    getCachedAllRecs(userId || "anonymous", skip, take, search),
+    getCachedRecsCount(search),
   ]);
 
   return {

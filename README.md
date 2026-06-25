@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PeerProducts 🛍️
 
-## Getting Started
+**PeerProducts** is a modern, premium product recommendation social network where people discover and share genuine, peer-to-peer product recommendations and reviews without ads or sponsors.
 
-First, run the development server:
+---
 
+## 🚀 Features
+
+### 1. 🔍 Type-Based Search & Pagination
+- Filter product recommendations by type (e.g., *Book*, *Sunscreen*, *Chair*) with immediate, query-preserving pagination (`/?page=1&search=term`).
+- Automatic URL normalization: visiting the naked root path `/` redirects to `/?page=1`.
+- Feed displays 8 items per page with Next/Previous navigation controls.
+
+### 2. ⚡ Performance & Caching
+- Configured **Next.js 16 Data Caching** using `unstable_cache` for database queries (Home feed, User recommendations, and Profiles).
+- Incorporated **User Session Serialization** inside cache keys to prevent dynamic "like" states from leaking across different accounts.
+- Leveraged Server Actions **`updateTag` invalidation** for instant, "read-your-own-writes" cache synchronization when adding, editing, liking, or deleting recommendations.
+
+### 3. 🎨 Premium Landing Page & Skeletons
+- A responsive, animated landing page on `/auth` for unauthenticated visitors. Features a 3D overlapping stack of product images with interactive scale-up hover micro-animations.
+- Tailored loading skeleton loaders (`loading.tsx`) designed to match forms and page layouts, eliminating visual layout shifts.
+
+### 4. 🔒 Route Protection & Auth
+- **Google OAuth** integration powered by Auth.js (NextAuth).
+- Middleware-level route protection (`proxy.ts`) ensuring all core functional pages (`/`, `/profile`, `/create`, `/reccs`, `/reccs/edit/*`) are accessible only by logged-in users, redirecting anonymous users to `/auth`.
+
+### 5. 📈 SEO Optimization
+- Automated page-specific metadata configuration exporting dynamic title tags and meta descriptions across all Server Component pages.
+
+---
+
+## 🛠️ Technology Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Runtime**: React 19
+- **Language**: TypeScript
+- **Styling**: TailwindCSS
+- **Database ORM**: Prisma
+- **Database**: PostgreSQL (Neon Serverless)
+- **Authentication**: Auth.js (NextAuth v5 Beta)
+- **Media Hosting**: Cloudinary
+
+---
+
+## ⚙️ Development Setup
+
+### 1. Clone & Install Dependencies
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Environment Configuration
+Create a `.env` file in the root directory and configure the following variables:
+```env
+# Database Connection
+DATABASE_URL="postgresql://..."
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# Auth.js Config (Generate AUTH_SECRET via openssl rand -base64 33)
+AUTH_SECRET="your-auth-secret"
+AUTH_GOOGLE_ID="google-client-id"
+AUTH_GOOGLE_SECRET="google-client-secret"
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Next Auth Base URL (optional for dev)
+NEXTAUTH_URL="http://localhost:3000"
 
-## Learn More
+# Cloudinary Credentials
+CLOUDINARY_CLOUD_NAME="your-cloud-name"
+CLOUDINARY_API_KEY="your-api-key"
+CLOUDINARY_API_SECRET="your-api-secret"
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 3. Database Push
+Sync the Prisma schema with your database instance:
+```bash
+npx prisma db push
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 4. Run Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 5. Verify Build Compilation
+Validate route compiling and TypeScript checking before deployment:
+```bash
+npm run build
+```
