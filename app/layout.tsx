@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DeepRecc | The Product Recommendation Social Network",
-  description: "Discover and share genuine, peer-to-peer product recommendations without sponsors or advertisements.",
+  title: "PeerProducts | Discover products through real recommendations",
+  description: "A social network where people discover products through real user recommendations and reviews",
 };
 
 export default function RootLayout({

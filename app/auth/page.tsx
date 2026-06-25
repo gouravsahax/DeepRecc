@@ -1,13 +1,15 @@
-'use client';
+import type { Metadata } from "next";
+import SignInButton from "../components/SignInButton";
 
-import { SignIn } from '@/lib/auth-action'
+export const metadata: Metadata = {
+  title: "Sign In | PeerProducts",
+  description: "Sign in to PeerProducts to share and discover genuine product recommendations and reviews.",
+};
 
-const page = () => {
+export default function AuthPage() {
   return (
-    <div className='w-screen h-[80vh] flex justify-center items-center'>
-      <button onClick={() => SignIn()} className='cursor-pointer px-2 py-1 border-1 border-white hover:bg-white hover:text-black rounded-sm text-md'>Sign In With Google</button>
+    <div className="w-screen h-[80vh] flex justify-center items-center">
+      <SignInButton />
     </div>
-  )
+  );
 }
-
-export default page

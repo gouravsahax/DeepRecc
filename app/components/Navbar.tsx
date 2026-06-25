@@ -9,8 +9,8 @@ const Navbar = () => {
   return (
     <nav className='sticky top-0 bg-zinc-950 w-full z-50'>
       <div className='flex justify-between items-center px-4 md:px-8 border-b-2 border-zinc-900'>
-        <span className="sm:hidden">dr</span>
-        <span className="hidden sm:inline">DeepRecc</span>
+        <span className="sm:hidden">pp</span>
+        <span className="hidden sm:inline">PeerProducts</span>
         <div className='flex gap-6'>
           <Link href='/' className={`py-2 + ${path === '/' ? 'border-b-2 border-white' : ''}`} >
               home

@@ -3,8 +3,8 @@ import EditProfileForm from "./EditProfileForm";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "My Profile | DeepRecc",
-  description: "View and edit your profile credentials and account settings.",
+  title: "My Profile | PeerProducts",
+  description: "View and edit your profile credentials and account settings on PeerProducts.",
 };
 
 const page = async () => {

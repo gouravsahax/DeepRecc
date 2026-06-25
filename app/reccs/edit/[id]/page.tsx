@@ -1,5 +1,11 @@
 import { getARecc, updateRecc } from "@/lib/recc-action";
 import SubmitButton from "../../../components/SubmitButton";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Edit Recommendation | PeerProducts",
+  description: "Update your product recommendation details.",
+};
 
 interface PageProps {
   params: Promise<{ id: string }>;

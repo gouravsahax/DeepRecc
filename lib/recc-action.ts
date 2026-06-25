@@ -3,8 +3,79 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
+import { updateTag, unstable_cache } from "next/cache";
 import { uploadImage } from "./cloudinary";
+
+const getCachedAllRecs = unstable_cache(
+  async (uid?: string) => {
+    return await prisma.recc.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        url: true,
+        imageUrl: true,
+        type: true,
+        likeCount: true,
+        createdAt: true,
+        userId: true,
+
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        likes: uid
+          ? {
+              where: { userId: uid },
+              select: { userId: true },
+            }
+          : false,
+      },
+    });
+  },
+  ["all-reccs"],
+  {
+    tags: ["reccs"],
+    revalidate: 3600,
+  }
+);
+
+const getCachedMyReccs = unstable_cache(
+  async (userId: string) => {
+    const [reccs, user] = await Promise.all([
+      prisma.recc.findMany({
+        where: {
+          userId,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      }),
+      prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+        select: {
+          reccCount: true,
+        },
+      }),
+    ]);
+
+    return {
+      reccs,
+      count: user?.reccCount ?? 0,
+    };
+  },
+  ["my-reccs"],
+  {
+    tags: ["reccs", "profile"],
+    revalidate: 3600,
+  }
+);
 
 export async function createRecc(data: FormData) {
   const session = await auth();
@@ -46,43 +117,15 @@ export async function createRecc(data: FormData) {
       timeout: 20000,
     }
   );
-
-  revalidatePath("/");
+  updateTag("reccs");
+  updateTag("profile");
   redirect("/reccs");
 }
 
 export async function getAllRecs() {
   const session = await auth();
   const userId = session?.user?.id;
-
-  return await prisma.recc.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
-    select: {
-      id: true,
-      title: true,
-      description: true,
-      url: true,
-      imageUrl: true,
-      type: true,
-      likeCount: true,
-      createdAt: true,
-      userId: true,
-
-      user: {
-        select: {
-          name: true,
-        },
-      },
-      likes: userId
-        ? {
-            where: { userId },
-            select: { userId: true },
-          }
-        : false,
-    },
-  });
+  return getCachedAllRecs(userId || "anonymous");
 }
 
 export async function getMyReccs() {
@@ -92,34 +135,7 @@ export async function getMyReccs() {
     throw new Error("Unauthorized");
   }
 
-  try {
-    const [reccs, user] = await Promise.all([
-      prisma.recc.findMany({
-        where: {
-          userId: session.user.id,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-      }),
-      prisma.user.findUnique({
-        where: {
-          id: session.user.id,
-        },
-        select: {
-          reccCount: true,
-        },
-      }),
-    ]);
-
-    return {
-      reccs,
-      count: user?.reccCount ?? 0,
-    };
-  } catch (err) {
-    console.error(err);
-    throw new Error("Error occurred while fetching recommendations");
-  }
+  return getCachedMyReccs(session.user.id);
 }
 
 export async function getARecc(id:string) {
@@ -184,8 +200,7 @@ export async function updateRecc(id: string, formData: FormData) {
     },
   });
 
-  revalidatePath("/reccs");
-  revalidatePath(`/reccs/edit/${id}`);
+  updateTag("reccs");
   redirect("/reccs");
 }
 
@@ -230,7 +245,8 @@ export async function deleteRecc(reccId: string) {
     }
   );
 
-  revalidatePath("/reccs");
+  updateTag("reccs");
+  updateTag("profile");
 }
 
 export async function toggleLike(reccId: string) {
@@ -275,7 +291,7 @@ export async function toggleLike(reccId: string) {
       });
     }
 
-    revalidatePath("/");
+    updateTag("reccs");
   } catch (error: any) {
     console.error(error);
     throw new Error(`Failed to toggle like: ${error.message || error}`);

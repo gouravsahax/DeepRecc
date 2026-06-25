@@ -3,8 +3,8 @@ import SubmitButton from "../components/SubmitButton"
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Share a Recommendation | DeepRecc",
-  description: "Recommend a product, book, video, or service with your thoughts.",
+  title: "Share a Recommendation | PeerProducts",
+  description: "Recommend a product, book, video, or service with your thoughts on PeerProducts.",
 };
 
 const page = () => {

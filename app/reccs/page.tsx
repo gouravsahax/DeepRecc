@@ -1,6 +1,12 @@
 import { getMyReccs, deleteRecc } from "@/lib/recc-action"
 import Link from "next/link";
 import SubmitButton from "../components/SubmitButton";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "My Recommendations | PeerProducts",
+  description: "Manage and view your product recommendations on PeerProducts.",
+};
 
 const page = async () => {
   const {reccs, count} = await getMyReccs();

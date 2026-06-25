@@ -2,6 +2,12 @@ import Link from "next/link";
 import { getAllRecs } from "@/lib/recc-action";
 import ReccImage from "./components/ReccImage";
 import LikeButton from "./components/LikeButton";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Home Feed | PeerProducts",
+  description: "Browse genuine product recommendations from the PeerProducts community.",
+};
 
 export default async function Home() {
   const reccs = await getAllRecs();

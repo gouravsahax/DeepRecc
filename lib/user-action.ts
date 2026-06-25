@@ -2,22 +2,32 @@
 
 import { prisma } from '@/lib/prisma'
 import { auth } from '@/auth'
-import { revalidatePath } from 'next/cache';
+import { updateTag, unstable_cache } from 'next/cache';
+
+const getCachedProfile = unstable_cache(
+  async (userId: string) => {
+    return await prisma.user.findFirst({
+      where: {
+        id: userId
+      }
+    });
+  },
+  ["user-profile"],
+  {
+    tags: ["profile"],
+    revalidate: 3600,
+  }
+);
 
 export async function getProfile() {
     const session = await auth();
 
-    if(!session?.user) {
+    if(!session?.user?.id) {
         return null;
     }
 
     try{
-        const user = await prisma.user.findFirst({
-            where: {
-                id: session.user.id
-            }
-        })
-        return user
+        return await getCachedProfile(session.user.id);
     } catch {
         throw new Error("Error in fetching user data");
     }
@@ -44,7 +54,8 @@ export async function updateProfileName(formData: FormData) {
                 name,
             },
         });
-        revalidatePath("/profile");
+        updateTag("profile");
+        updateTag("reccs");
     } catch (error) {
         console.error(error);
         throw new Error("Failed to update profile name");
