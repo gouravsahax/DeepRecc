@@ -23,7 +23,6 @@ model User {
 
   reccCount     Int @default(0)
   reccs         Recc[]
-  comments      Comment[]
   likes         Like[]
 
   accounts      Account[]
@@ -82,27 +81,9 @@ model Recc {
 
   likeCount   Int @default(0)
   likes       Like[]
-
-  commentCount Int @default(0)
-  comments     Comment[]
-
   createdAt   DateTime @default(now())
 
   @@index([createdAt])
-}
-
-model Comment {
-  id        String @id @default(cuid())
-
-  content   String
-
-  userId    String
-  user      User @relation(fields: [userId], references: [id])
-
-  reccId    String
-  recc      Recc @relation(fields: [reccId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
 }
 
 model Like {

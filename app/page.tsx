@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getAllRecs } from "@/lib/recc-action";
-import { ThumbsUp, MessageCircle } from "lucide-react";
+import { ThumbsUp } from "lucide-react";
 import ReccImage from "./components/ReccImage";
 
 export default async function Home() {
@@ -8,7 +8,7 @@ export default async function Home() {
 
   return (
     <div className="w-screen flex flex-col items-center">
-      <div className="w-full min-h-screen lg:w-[70vw] xl:w-[60vw] flex flex-col border-x border-zinc-800">
+      <div className="w-full min-h-screen lg:w-[85vw] xl:w-[80vw] flex flex-col border-x border-zinc-800">
 
         <div className="w-full columns-1 md:columns-2 gap-4 p-4">
           {reccs.length === 0 ? (
@@ -62,10 +62,6 @@ export default async function Home() {
                   <span className="flex items-center gap-1.5">
                     <ThumbsUp size={14} />
                     {recc.likeCount}
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <MessageCircle size={14} />
-                    {recc.commentCount}
                   </span>
                   <span className="ml-auto">
                     {new Date(recc.createdAt).toLocaleDateString()}

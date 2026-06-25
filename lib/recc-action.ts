@@ -64,7 +64,6 @@ export async function getAllRecs() {
       imageUrl: true,
       type: true,
       likeCount: true,
-      commentCount: true,
       createdAt: true,
       userId: true,
 
