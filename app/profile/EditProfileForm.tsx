@@ -64,7 +64,7 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
   };
 
   return (
-    <div className="w-full max-w-md bg-zinc-900/60 backdrop-blur-lg border border-zinc-800 rounded-2xl p-8 shadow-2xl transition-all duration-300 hover:border-zinc-700/80">
+    <div className="w-full max-w-md bg-black backdrop-blur-lg border border-zinc-800 rounded-sm p-8 shadow-2xl transition-all duration-300 hover:border-zinc-700/80">
       {/* Profile Header (Avatar and Name) */}
       <div className="flex flex-col items-center mb-6">
         <div className="relative group mb-4">

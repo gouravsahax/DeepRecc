@@ -7,9 +7,9 @@ export default async function Home() {
 
   return (
     <div className="w-screen flex flex-col items-center">
-      <div className="w-full min-h-screen lg:w-[40vw] flex flex-col border-x border-zinc-800">
+      <div className="w-full min-h-screen lg:w-[70vw] xl:w-[60vw] flex flex-col border-x border-zinc-800">
 
-        <div className="w-full flex flex-col">
+        <div className="w-full columns-1 md:columns-2 gap-4 p-4">
           {reccs.length === 0 ? (
             <p className="px-4 py-8 text-center text-zinc-400">
               No recommendations yet.
@@ -18,7 +18,7 @@ export default async function Home() {
             reccs.map((recc) => (
               <article
                 key={recc.id}
-                className="border border-zinc-800 rounded-xl px-4 py-4 m-3"
+                className="border border-zinc-800 rounded-xl px-4 py-4 mb-4 break-inside-avoid bg-zinc-950/40"
               >
                 {/* Header: username → recommended a [type link] */}
                 <div className="flex items-center gap-2 text-sm text-zinc-400 mb-3">
