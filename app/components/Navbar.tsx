@@ -15,6 +15,9 @@ const Navbar = () => {
           <Link href='/' className={`py-2 + ${path === '/' ? 'border-b-2 border-white' : ''}`} >
               home
           </Link>
+          <Link href='/create' className={`py-2 + ${path === '/create' ? 'border-b-2 border-white' : ''}`}>
+              create
+          </Link>
           <Link href='/reccs' className={`py-2 + ${path === '/reccs' ? 'border-b-2 border-white' : ''}`}>
               my reccs
           </Link>
